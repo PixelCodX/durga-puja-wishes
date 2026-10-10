@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="theme-color" content="#180609">
+  <meta name="description" content="Create and share beautiful personalized Durga Puja wishes with your loved ones.">
+
+  <title>Divine Durga | Puja Wishes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="ambient-glow"></div>
+  <div class="particles" id="particles"></div>
+
+  <header class="navbar">
+    <a href="#" class="brand">✦ DIVINE DURGA</a>
+    <span class="nav-label">FESTIVAL OF DEVOTION</span>
+  </header>
+
+  <main class="hero">
+
+    <div class="hero-content">
+
+      <div class="eyebrow">
+        <span class="line"></span>
+        THE DIVINE FESTIVAL
+        <span class="line"></span>
+      </div>
+
+      <h1>
+        Shubho
+        <span>Durga Puja</span>
+      </h1>
+
+      <p class="intro">
+        May Maa Durga bless your life with strength,
+        happiness, prosperity and endless love.
+      </p>
+
+      <div class="ornament">✧ ❋ ✧</div>
+
+      <button class="create-btn" id="createGreeting">
+        <span>✦</span>
+        <span>Create Your Greeting</span>
+        <span class="arrow">↗</span>
+      </button>
+
+      <p class="share-note">
+        CREATE A WISH · SHARE THE BLESSINGS
+      </p>
+
+    </div>
+
+    <div class="hero-art">
+
+      <div class="art-frame">
+        <div class="frame-glow"></div>
+
+        <img
+          src="assets/images/durga-puja.webp"
+          alt="Maa Durga in a grand traditional Bengali Durga Puja pandal"
+          class="durga-image"
+          id="durgaImage"
+        >
+
+        <div class="image-overlay"></div>
+
+        <div class="image-caption">
+          <span class="caption-symbol">✦</span>
+          <p>THE POWER OF DIVINITY</p>
+          <span class="caption-subtitle">THE BLESSINGS OF MAA DURGA</span>
+        </div>
+
+      </div>
+
+      <div class="floating-symbol symbol-one">✧</div>
+      <div class="floating-symbol symbol-two">✦</div>
+      <div class="floating-symbol symbol-three">❋</div>
+
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <span>MAA DURGA'S BLESSINGS BE WITH YOU</span>
+    <span>🙏 শুভ দুর্গা পূজা 🙏</span>
+  </footer>
+
+  <div class="modal hidden" id="nameModal">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+
+    <section class="modal-card">
+
+      <button class="close-btn" id="closeModal" aria-label="Close">×</button>
+
+      <div class="modal-symbol">❋</div>
+
+      <p class="modal-eyebrow">SPREAD THE BLESSINGS</p>
+
+      <h2>Create Your <span>Greeting</span></h2>
+
+      <p class="modal-description">
+        Enter your name to create a special Durga Puja wish for your loved ones.
+      </p>
+
+      <label for="visitorName">YOUR NAME</label>
+
+      <input
+        id="visitorName"
+        type="text"
+        placeholder="Enter your name..."
+        maxlength="40"
+        autocomplete="name"
+      >
+
+      <button class="create-btn modal-submit" id="generateGreeting">
+        Generate My Greeting ↗
+      </button>
+
+      <p class="form-error" id="formError" aria-live="polite"></p>
+
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+
+</body>
+    </html>
