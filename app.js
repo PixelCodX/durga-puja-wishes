@@ -186,28 +186,35 @@ async function createGreetingImage(name) {
 
   ctx.textAlign = "center";
 
-  // Festival title
-  ctx.fillStyle = "#ffe4a6";
-  ctx.font = "bold 68px Georgia";
-  ctx.fillText("SHUBHO", 540, 950);
+  // Hindi Festival Title
+ctx.fillStyle = "#ffe4a6";
+ctx.textAlign = "center";
+ctx.font = 'bold 76px "Noto Serif Devanagari", serif';
+ctx.fillText("शुभ दुर्गा पूजा", 540, 1000);
 
-  ctx.font = "bold 76px Georgia";
-  ctx.fillText("DURGA PUJA", 540, 1040);
+  // Hindi Blessing Message
+ctx.fillStyle = "#ffffff";
+ctx.textAlign = "center";
+ctx.font = '36px "Noto Serif Devanagari", serif';
 
-  // Blessing message
-  ctx.fillStyle = "#ffffff";
-  ctx.font = "34px Arial";
-  ctx.fillText(
-    "Maa Durga bless you and your family",
-    540,
-    1110
-  );
+ctx.fillText(
+  "माँ दुर्गा आपके जीवन में",
+  540,
+  1080
+);
 
-  ctx.fillText(
-    "with happiness and prosperity.",
-    540,
-    1160
-  );
+ctx.fillText(
+  "सुख, शांति और समृद्धि लाएँ।",
+  540,
+  1135
+);
+
+ctx.font = '30px "Noto Serif Devanagari", serif';
+ctx.fillText(
+  "माँ का आशीर्वाद सदैव बना रहे।",
+  540,
+  1185
+);
 
   // Sender's name
   ctx.fillStyle = "#ffe4a6";
