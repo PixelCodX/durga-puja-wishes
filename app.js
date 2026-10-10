@@ -228,12 +228,14 @@ async function createGreetingImage(name) {
     }, "image/png");
   });
                     }
+// =====================================
+// PERSONALIZED GREETING PREVIEW
+// =====================================
+
 function showGreetingPreview(name, greetingLink, whatsappLink) {
   const existing = document.getElementById("greetingPreview");
 
-  if (existing) {
-    existing.remove();
-  }
+  if (existing) existing.remove();
 
   const preview = document.createElement("section");
   preview.id = "greetingPreview";
@@ -253,41 +255,128 @@ function showGreetingPreview(name, greetingLink, whatsappLink) {
   const actions = document.createElement("div");
   actions.className = "preview-actions";
 
+  // DOWNLOAD IMAGE BUTTON
+  const downloadButton = document.createElement("button");
+  downloadButton.className = "create-btn";
+  downloadButton.textContent = "📥 Download Greeting Image";
+
+  downloadButton.addEventListener("click", async () => {
+    downloadButton.disabled = true;
+    downloadButton.textContent = "Creating image...";
+
+    try {
+      const blob = await createGreetingImage(name);
+      const imageUrl = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = imageUrl;
+      link.download = "durga-puja-greeting.png";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      setTimeout(() => URL.revokeObjectURL(imageUrl), 3000);
+
+      downloadButton.textContent = "✅ Image Downloaded!";
+    } catch (error) {
+      console.error(error);
+      alert("Image create nahi hui. Please image file check karo.");
+      downloadButton.textContent = "📥 Download Greeting Image";
+    } finally {
+      downloadButton.disabled = false;
+    }
+  });
+
+  // SHARE IMAGE BUTTON
+  const imageShareButton = document.createElement("button");
+  imageShareButton.className = "create-btn";
+  imageShareButton.textContent = "📲 Share Greeting Image";
+
+  imageShareButton.addEventListener("click", async () => {
+    imageShareButton.disabled = true;
+    imageShareButton.textContent = "Preparing image...";
+
+    try {
+      const blob = await createGreetingImage(name);
+
+      const file = new File(
+        [blob],
+        "durga-puja-greeting.png",
+        { type: "image/png" }
+      );
+
+      if (
+        navigator.canShare &&
+        navigator.canShare({ files: [file] }) &&
+        navigator.share
+      ) {
+        await navigator.share({
+          files: [file],
+          title: "Shubho Durga Puja",
+          text: `Durga Puja ki shubhkamnayein ${name} ki aur se! 🌺`
+        });
+      } else {
+        const imageUrl = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = imageUrl;
+        link.download = "durga-puja-greeting.png";
+        link.click();
+
+        setTimeout(() => URL.revokeObjectURL(imageUrl), 3000);
+
+        alert(
+          "Image download ho gayi! Ab WhatsApp kholo aur image attach karke share karo."
+        );
+      }
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        console.error(error);
+        alert("Image share nahi ho payi. Download button try karo.");
+      }
+    } finally {
+      imageShareButton.disabled = false;
+      imageShareButton.textContent = "📲 Share Greeting Image";
+    }
+  });
+
+  // SHARE TEXT ON WHATSAPP
   const shareButton = document.createElement("a");
   shareButton.className = "create-btn";
   shareButton.href = whatsappLink;
   shareButton.target = "_blank";
   shareButton.rel = "noopener noreferrer";
-  shareButton.textContent = "Share on WhatsApp ↗";
+  shareButton.textContent = "💬 Share Text on WhatsApp";
 
+  // COPY LINK BUTTON
   const copyButton = document.createElement("button");
   copyButton.className = "copy-btn";
-  copyButton.textContent = "Copy Greeting Link";
+  copyButton.textContent = "🔗 Copy Greeting Link";
 
   copyButton.addEventListener("click", async () => {
     try {
       await navigator.clipboard.writeText(greetingLink);
-      copyButton.textContent = "✓ Link Copied!";
-
-      setTimeout(() => {
-        copyButton.textContent = "Copy Greeting Link";
-      }, 2000);
+      copyButton.textContent = "✅ Link Copied!";
     } catch {
       window.prompt("Copy your greeting link:", greetingLink);
     }
   });
 
+  // CLOSE BUTTON
   const closeButton = document.createElement("button");
   closeButton.className = "copy-btn";
   closeButton.textContent = "Close Greeting";
+  closeButton.addEventListener("click", () => preview.remove());
 
-  closeButton.addEventListener("click", () => {
-    preview.remove();
-  });
+  actions.append(
+    downloadButton,
+    imageShareButton,
+    shareButton,
+    copyButton,
+    closeButton
+  );
 
-  actions.append(shareButton, copyButton, closeButton);
   preview.append(title, message, signature, actions);
-
   document.body.appendChild(preview);
 
   preview.scrollIntoView({
