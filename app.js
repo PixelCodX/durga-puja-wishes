@@ -311,10 +311,16 @@ function showGreetingPreview(name, greetingLink, whatsappLink) {
         navigator.share
       ) {
         await navigator.share({
-          files: [file],
-          title: "Shubho Durga Puja",
-          text: `Durga Puja ki shubhkamnayein ${name} ki aur se! 🌺`
-        });
+  files: [file],
+  title: "🌺 Shubho Durga Puja",
+  text:
+    `🌺 Shubho Durga Puja! 🌺\n\n` +
+    `Maa Durga ki kripa aap aur aapke parivaar par bani rahe. 🙏\n\n` +
+    `Shubhkamnayein ${name} ki aur se! ❤️\n\n` +
+    `✨ Apna personalized greeting yahan banayein:\n` +
+    `${greetingLink}\n\n` +
+    `Apne friends ke saath bhi share karein! 🌸`
+});
       } else {
         const imageUrl = URL.createObjectURL(blob);
         const link = document.createElement("a");
