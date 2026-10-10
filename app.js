@@ -389,7 +389,30 @@ function showGreetingPreview(name, greetingLink, whatsappLink) {
     closeButton
   );
 
-  preview.append(title, message, signature, actions);
+  // Greeting image preview
+const imagePreview = document.createElement("img");
+
+imagePreview.alt = "Personalized Durga Puja Greeting";
+imagePreview.className = "greeting-image-preview";
+imagePreview.style.display = "block";
+imagePreview.style.width = "100%";
+imagePreview.style.maxWidth = "420px";
+imagePreview.style.height = "auto";
+imagePreview.style.margin = "20px auto";
+imagePreview.style.borderRadius = "12px";
+imagePreview.style.border = "2px solid #e7bd70";
+
+preview.append(title, imagePreview, message, signature, actions);
+
+// Generate the actual greeting image for preview
+createGreetingImage(name)
+  .then((blob) => {
+    imagePreview.src = URL.createObjectURL(blob);
+  })
+  .catch((error) => {
+    console.error("Greeting preview error:", error);
+    imagePreview.alt = "Image preview load nahi ho paya.";
+  });
   document.body.appendChild(preview);
 
   preview.scrollIntoView({
