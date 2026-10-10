@@ -354,13 +354,14 @@ function showGreetingPreview(name, greetingLink, whatsappLink) {
     }
   });
 
-  // SHARE TEXT ON WHATSAPP
-  const shareButton = document.createElement("a");
-  shareButton.className = "create-btn";
-  shareButton.href = whatsappLink;
-  shareButton.target = "_blank";
-  shareButton.rel = "noopener noreferrer";
-  shareButton.textContent = "💬 Share Text on WhatsApp";
+  // SUPPORT CREATOR ON INSTAGRAM
+const shareButton = document.createElement("a");
+
+shareButton.className = "create-btn";
+shareButton.href = "https://www.instagram.com/YOUR_USERNAME/";
+shareButton.target = "_blank";
+shareButton.rel = "noopener noreferrer";
+shareButton.textContent = "💖 Support Creator";
 
   // COPY LINK BUTTON
   const copyButton = document.createElement("button");
