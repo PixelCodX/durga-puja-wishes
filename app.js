@@ -133,7 +133,101 @@ visitorNameInput.addEventListener("keydown", (event) => {
 // =====================================
 // PERSONALIZED GREETING PREVIEW
 // =====================================
+// Generate a personalized Durga Puja greeting card
+async function createGreetingImage(name) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1080;
+  canvas.height = 1350;
 
+  const ctx = canvas.getContext("2d");
+
+  // Load Maa Durga artwork
+  const img = new Image();
+  img.src = "assets/images/durga-puja.webp";
+
+  await new Promise((resolve, reject) => {
+    img.onload = resolve;
+    img.onerror = reject;
+  });
+
+  // Draw artwork as the background
+  const scale = Math.max(
+    canvas.width / img.width,
+    canvas.height / img.height
+  );
+
+  const width = img.width * scale;
+  const height = img.height * scale;
+
+  ctx.drawImage(
+    img,
+    (canvas.width - width) / 2,
+    (canvas.height - height) / 2,
+    width,
+    height
+  );
+
+  // Dark gradient for readable text
+  const gradient = ctx.createLinearGradient(
+    0, 0, 0, canvas.height
+  );
+
+  gradient.addColorStop(0, "rgba(20, 0, 0, 0.15)");
+  gradient.addColorStop(0.45, "rgba(20, 0, 0, 0.15)");
+  gradient.addColorStop(1, "rgba(20, 0, 0, 0.88)");
+
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Golden border
+  ctx.strokeStyle = "#e7bd70";
+  ctx.lineWidth = 8;
+  ctx.strokeRect(32, 32, 1016, 1286);
+
+  ctx.textAlign = "center";
+
+  // Festival title
+  ctx.fillStyle = "#ffe4a6";
+  ctx.font = "bold 68px Georgia";
+  ctx.fillText("SHUBHO", 540, 950);
+
+  ctx.font = "bold 76px Georgia";
+  ctx.fillText("DURGA PUJA", 540, 1040);
+
+  // Blessing message
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "34px Arial";
+  ctx.fillText(
+    "Maa Durga bless you and your family",
+    540,
+    1110
+  );
+
+  ctx.fillText(
+    "with happiness and prosperity.",
+    540,
+    1160
+  );
+
+  // Sender's name
+  ctx.fillStyle = "#ffe4a6";
+  ctx.font = "bold 38px Arial";
+
+  const sender = `With love, ${name}`;
+
+  ctx.fillText(sender, 540, 1240);
+
+  // Return the generated PNG image
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (blob) {
+        resolve(blob);
+      } else {
+        reject(new Error("Could not create greeting image."));
+      }
+    }, "image/png");
+  });
+                    }
 function showGreetingPreview(name, greetingLink, whatsappLink) {
   const existing = document.getElementById("greetingPreview");
 
