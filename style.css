@@ -599,3 +599,39 @@ h1 span {
     scroll-behavior: auto !important;
   }
                     }
+/* Greeting preview buttons */
+.preview-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.preview-actions .create-btn,
+.preview-actions .copy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 20px;
+  border: 1px solid #e7bd70;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #5b1019, #8b1e2d);
+  color: #ffe4a6;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.preview-actions .create-btn:hover,
+.preview-actions .copy-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 18px rgba(231, 189, 112, 0.25);
+}
+
+.preview-actions button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+    }
