@@ -216,13 +216,14 @@ ctx.fillText(
   1185
 );
 
-  // Sender's name
-  ctx.fillStyle = "#ffe4a6";
-  ctx.font = "bold 38px Arial";
+  // Hindi sender message with English name
+ctx.fillStyle = "#ffe4a6";
+ctx.textAlign = "center";
+ctx.font = 'bold 38px "Noto Serif Devanagari", Arial';
 
-  const sender = `With love, ${name}`;
+const sender = `सप्रेम शुभकामनाएँ, ${name}`;
 
-  ctx.fillText(sender, 540, 1240);
+ctx.fillText(sender, 540, 1240);
 
   // Return the generated PNG image
   return new Promise((resolve, reject) => {
