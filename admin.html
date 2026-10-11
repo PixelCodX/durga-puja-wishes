@@ -286,23 +286,25 @@
           );
         }
 
-        document.getElementById("totalVisits").textContent =
-          result.total_visits ?? 0;
+        const last7Days = result.last7Days || [];
 
-        document.getElementById("totalWishes").textContent =
-          result.total_wishes ?? 0;
+document.getElementById("totalVisits").textContent =
+  result.totalVisits ?? 0;
 
-        document.getElementById("todayVisits").textContent =
-          result.today_visits ?? 0;
+document.getElementById("totalWishes").textContent =
+  result.totalGreetings ?? 0;
 
-        document.getElementById("todayWishes").textContent =
-          result.today_wishes ?? 0;
+document.getElementById("todayVisits").textContent =
+  result.todayVisits ?? 0;
 
-        document.getElementById("weekVisits").textContent =
-          result.week_visits ?? 0;
+document.getElementById("todayWishes").textContent =
+  result.todayGreetings ?? 0;
 
-        document.getElementById("weekWishes").textContent =
-          result.week_wishes ?? 0;
+document.getElementById("weekVisits").textContent =
+  last7Days.reduce((sum, day) => sum + Number(day.visits || 0), 0);
+
+document.getElementById("weekWishes").textContent =
+  last7Days.reduce((sum, day) => sum + Number(day.greetings || 0), 0);
 
         statsMessage.textContent = "";
       } catch (error) {
