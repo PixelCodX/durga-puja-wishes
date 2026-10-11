@@ -464,8 +464,9 @@ durgaImage.addEventListener("error", () => {
       const response = await fetch(FUNCTION_URL, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
-        },
+  "Content-Type": "application/json",
+  "apikey": "sb_publishable_PHpSZmbegb7KA_zeCE27Eg_YyIrnTdM"
+},
         body: JSON.stringify({
           event_type: eventType,
           page: page || window.location.pathname
