@@ -1,347 +1,469 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Navro Admin Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Navro | Puja Admin</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+:root {
+  --maroon: #30070e;
+  --deep: #190308;
+  --red: #641321;
+  --gold: #e8bd69;
+  --lightgold: #ffe7ad;
+  --cream: #fff5df;
+}
 
-    body {
-      margin: 0;
-      padding: 20px;
-      font-family: Arial, sans-serif;
-      background: #f4f5f7;
-      color: #222;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    .container {
-      max-width: 850px;
-      margin: 40px auto;
-    }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--cream);
+  background:
+    radial-gradient(ellipse at top, #79212d 0%, transparent 48%),
+    linear-gradient(145deg, var(--maroon), var(--deep) 75%);
+}
 
-    .card {
-      background: white;
-      padding: 24px;
-      margin-bottom: 20px;
-      border-radius: 14px;
-      box-shadow: 0 4px 18px #0000000d;
-    }
+body::before {
+  content: "";
+  position: fixed;
+  inset: 10px;
+  border: 1px solid rgba(232,189,105,.5);
+  border-radius: 16px;
+  pointer-events: none;
+}
 
-    h1, h2 {
-      margin-top: 0;
-    }
+.page {
+  width: min(100% - 36px, 1000px);
+  margin: auto;
+  padding: 42px 0 50px;
+}
 
-    input, button {
-      width: 100%;
-      padding: 13px;
-      margin-top: 12px;
-      border-radius: 8px;
-      font-size: 16px;
-    }
+header {
+  text-align: center;
+  padding: 22px 10px 30px;
+}
 
-    input {
-      border: 1px solid #ccc;
-    }
+.ornament {
+  color: var(--gold);
+  font-size: 27px;
+  letter-spacing: 8px;
+  margin-bottom: 15px;
+}
 
-    button {
-      border: none;
-      background: #222;
-      color: white;
-      cursor: pointer;
-    }
+h1 {
+  margin: 0;
+  color: var(--lightgold);
+  font-size: clamp(30px, 6vw, 48px);
+  font-weight: normal;
+  letter-spacing: 1px;
+}
 
-    button:disabled {
-      opacity: 0.6;
-      cursor: wait;
-    }
+.subtitle {
+  color: #e9c9a0;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  letter-spacing: 3px;
+  margin-top: 12px;
+  text-transform: uppercase;
+}
 
-    #message {
-      margin-top: 15px;
-      overflow-wrap: anywhere;
-      line-height: 1.5;
-    }
+.divider {
+  width: 150px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 23px auto;
+}
 
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 14px;
-    }
+.panel {
+  border: 1px solid rgba(232,189,105,.45);
+  background: linear-gradient(
+    145deg,
+    rgba(111,31,43,.78),
+    rgba(36,5,12,.92)
+  );
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 15px 45px #0005, inset 0 0 25px #e8bd6908;
+  margin-bottom: 22px;
+}
 
-    .stat {
-      background: #f7f7f7;
-      padding: 20px;
-      border-radius: 10px;
-    }
+h2 {
+  font-size: 24px;
+  font-weight: normal;
+  color: var(--lightgold);
+  margin: 0 0 22px;
+}
 
-    .number {
-      font-size: 28px;
-      font-weight: bold;
-      margin-top: 10px;
-    }
+input {
+  width: 100%;
+  background: #20060b;
+  border: 1px solid #8f623d;
+  border-radius: 9px;
+  padding: 15px;
+  color: white;
+  margin: 7px 0;
+  font-size: 15px;
+  outline: none;
+}
 
-    .hidden {
-      display: none;
-    }
+input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px #e8bd6920;
+}
 
-    .small {
-      color: #666;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-  </style>
+button {
+  width: 100%;
+  padding: 14px 18px;
+  margin-top: 13px;
+  background: linear-gradient(110deg, #b57b35, #f3d18a, #bd843a);
+  color: #35100c;
+  font-size: 15px;
+  font-weight: bold;
+  letter-spacing: .5px;
+  border: 1px solid #ffe5a7;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: transform .2s, filter .2s;
+}
+
+button:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  opacity: .6;
+  cursor: wait;
+  transform: none;
+}
+
+.secondary {
+  background: transparent;
+  color: var(--lightgold);
+  border: 1px solid #a97947;
+}
+
+.message {
+  font: 14px/1.6 Arial, sans-serif;
+  overflow-wrap: anywhere;
+  margin-top: 15px;
+  color: var(--lightgold);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.stat {
+  min-height: 125px;
+  padding: 20px;
+  border: 1px solid #b1834e88;
+  border-radius: 13px;
+  background:
+    radial-gradient(ellipse at top right, #c18a3520, transparent 65%),
+    #26060d;
+}
+
+.stat-label {
+  font: 12px/1.5 Arial, sans-serif;
+  color: #e5c69a;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.number {
+  color: var(--lightgold);
+  font-size: 34px;
+  margin-top: 12px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.footer {
+  text-align: center;
+  color: #c8a77d;
+  font: 12px Arial, sans-serif;
+  letter-spacing: 1px;
+  padding: 15px;
+}
+
+@media (min-width: 650px) {
+  .stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 400px) {
+  .page {
+    width: calc(100% - 28px);
+    padding-top: 25px;
+  }
+
+  .panel {
+    padding: 20px;
+  }
+
+  .stat {
+    padding: 14px;
+  }
+
+  .number {
+    font-size: 29px;
+  }
+}
+</style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>Navro Admin</h1>
+<main class="page">
 
-    <div class="card" id="loginCard">
-      <h2>Admin Login</h2>
-
-      <form id="loginForm">
-        <input
-          type="email"
-          id="email"
-          placeholder="Admin email"
-          autocomplete="username"
-          required
-        />
-
-        <input
-          type="password"
-          id="password"
-          placeholder="Password"
-          autocomplete="current-password"
-          required
-        />
-
-        <button type="submit" id="loginButton">Login</button>
-      </form>
-
-      <div id="message" role="status"></div>
-
-      <p class="small">
-        Login with the account registered in this Supabase project
-        and authorized for the admin dashboard.
-      </p>
+  <header>
+    <div class="ornament">✦ ❖ ✦</div>
+    <h1>Navro</h1>
+    <div class="subtitle">Durga Puja · Admin Dashboard</div>
+    <div class="divider"></div>
+    <div style="color:#f0d7b0;font-size:17px;">
+      शुभो शारदीयः
     </div>
+  </header>
 
-    <div class="card hidden" id="dashboard">
-      <h2>Website Statistics</h2>
+  <section class="panel" id="loginCard">
+    <h2>🪔 Admin Darshan</h2>
 
-      <div class="stats">
-        <div class="stat">
-          Total Visits
-          <div class="number" id="totalVisits">—</div>
-        </div>
+    <form id="loginForm">
+      <input
+        type="email"
+        id="email"
+        placeholder="Admin email"
+        autocomplete="username"
+        required
+      >
 
-        <div class="stat">
-          Total Greetings Created
-          <div class="number" id="totalWishes">—</div>
-        </div>
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+        autocomplete="current-password"
+        required
+      >
 
-        <div class="stat">
-          Visits Today
-          <div class="number" id="todayVisits">—</div>
-        </div>
+      <button type="submit" id="loginButton">
+        Enter Dashboard
+      </button>
+    </form>
 
-        <div class="stat">
-          Greetings Today
-          <div class="number" id="todayWishes">—</div>
-        </div>
+    <div class="message" id="message" role="status"></div>
+  </section>
 
-        <div class="stat">
-          Visits — Last 7 Days
-          <div class="number" id="weekVisits">—</div>
-        </div>
+  <section class="panel hidden" id="dashboard">
+    <h2>🌺 Website Statistics</h2>
 
-        <div class="stat">
-          Greetings — Last 7 Days
-          <div class="number" id="weekWishes">—</div>
-        </div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Total Visits</div>
+        <div class="number" id="totalVisits">—</div>
       </div>
 
-      <button id="refreshButton">Refresh Statistics</button>
-      <button id="logoutButton">Logout</button>
+      <div class="stat">
+        <div class="stat-label">Greetings Created</div>
+        <div class="number" id="totalWishes">—</div>
+      </div>
 
-      <div id="statsMessage" role="status"></div>
+      <div class="stat">
+        <div class="stat-label">Visits Today</div>
+        <div class="number" id="todayVisits">—</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Greetings Today</div>
+        <div class="number" id="todayWishes">—</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Visits · 7 Days</div>
+        <div class="number" id="weekVisits">—</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Greetings · 7 Days</div>
+        <div class="number" id="weekWishes">—</div>
+      </div>
     </div>
+
+    <button id="refreshButton">↻ Refresh Statistics</button>
+    <button class="secondary" id="logoutButton">Logout</button>
+
+    <div class="message" id="statsMessage" role="status"></div>
+  </section>
+
+  <div class="footer">
+    ✦ MADE WITH DEVOTION ✦
   </div>
+</main>
 
-  <script>
-    const SUPABASE_URL =
-      "https://iqzzqpgtjvnzjuikrxjd.supabase.co";
+<script>
+const SUPABASE_URL =
+  "https://iqzzqpgtjvnzjuikrxjd.supabase.co";
 
-    const SUPABASE_PUBLISHABLE_KEY =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxenpxcGd0anZuemp1aWtyeGpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NjUwNzUsImV4cCI6MjEwNzI0MTA3NX0.rgNoRsN9aNRWEu0B7hWB4JrSdRZIZs3b-G8KN1ku6II";
+const SUPABASE_PUBLISHABLE_KEY =
+  "PASTE_YOUR_LEGACY_ANON_KEY_HERE";
 
-    const client = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY
+const client = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+const loginCard = document.getElementById("loginCard");
+const dashboard = document.getElementById("dashboard");
+const message = document.getElementById("message");
+const statsMessage = document.getElementById("statsMessage");
+const loginButton = document.getElementById("loginButton");
+
+function showLogin() {
+  dashboard.classList.add("hidden");
+  loginCard.classList.remove("hidden");
+}
+
+function showDashboard() {
+  loginCard.classList.add("hidden");
+  dashboard.classList.remove("hidden");
+}
+
+document.getElementById("loginForm").addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+    loginButton.disabled = true;
+    message.textContent = "Connecting...";
+
+    try {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      const { data, error } = await client.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) throw error;
+
+      showDashboard();
+      message.textContent = "";
+      await loadStats(data.session);
+    } catch (error) {
+      message.textContent = "Login failed: " + error.message;
+    } finally {
+      loginButton.disabled = false;
+    }
+  }
+);
+
+async function loadStats(session = null) {
+  statsMessage.textContent = "Loading statistics...";
+
+  try {
+    if (!session) {
+      const { data, error } = await client.auth.getSession();
+      if (error) throw error;
+      session = data.session;
+    }
+
+    if (!session) {
+      showLogin();
+      message.textContent = "Please log in again.";
+      return;
+    }
+
+    const response = await fetch(
+      SUPABASE_URL + "/functions/v1/analytics-stats",
+      {
+        headers: {
+          "apikey": SUPABASE_PUBLISHABLE_KEY,
+          "Authorization": "Bearer " + session.access_token
+        }
+      }
     );
 
-    const loginCard = document.getElementById("loginCard");
-    const dashboard = document.getElementById("dashboard");
-    const message = document.getElementById("message");
-    const statsMessage = document.getElementById("statsMessage");
-    const loginButton = document.getElementById("loginButton");
+    const result = await response.json();
 
-    function showMessage(text) {
-      message.textContent = text;
+    if (!response.ok) {
+      throw new Error(
+        result.error || result.message ||
+        "Statistics request failed: " + response.status
+      );
     }
 
-    function showDashboard() {
-      loginCard.classList.add("hidden");
-      dashboard.classList.remove("hidden");
+    const last7Days = result.last7Days || [];
+
+    document.getElementById("totalVisits").textContent =
+      result.totalVisits ?? 0;
+
+    document.getElementById("totalWishes").textContent =
+      result.totalGreetings ?? 0;
+
+    document.getElementById("todayVisits").textContent =
+      result.todayVisits ?? 0;
+
+    document.getElementById("todayWishes").textContent =
+      result.todayGreetings ?? 0;
+
+    document.getElementById("weekVisits").textContent =
+      last7Days.reduce(
+        (sum, day) => sum + Number(day.visits || 0), 0
+      );
+
+    document.getElementById("weekWishes").textContent =
+      last7Days.reduce(
+        (sum, day) => sum + Number(day.greetings || 0), 0
+      );
+
+    statsMessage.textContent = "";
+  } catch (error) {
+    statsMessage.textContent =
+      "Could not load statistics: " + error.message;
+  }
+}
+
+document.getElementById("refreshButton").addEventListener(
+  "click", () => loadStats()
+);
+
+document.getElementById("logoutButton").addEventListener(
+  "click", async () => {
+    await client.auth.signOut();
+    showLogin();
+    message.textContent = "Logged out.";
+    statsMessage.textContent = "";
+  }
+);
+
+async function checkSession() {
+  try {
+    const { data, error } = await client.auth.getSession();
+    if (error) throw error;
+
+    if (data.session) {
+      showDashboard();
+      await loadStats(data.session);
     }
+  } catch (error) {
+    message.textContent = error.message;
+  }
+}
 
-    function showLogin() {
-      dashboard.classList.add("hidden");
-      loginCard.classList.remove("hidden");
-    }
-
-    document
-      .getElementById("loginForm")
-      .addEventListener("submit", async function (event) {
-        event.preventDefault();
-
-        loginButton.disabled = true;
-        showMessage("Logging in...");
-
-        try {
-          const email = document.getElementById("email").value.trim();
-          const password = document.getElementById("password").value;
-
-          const { data, error } = await client.auth.signInWithPassword({
-            email,
-            password
-          });
-
-          if (error) {
-            showMessage(
-              "Login failed: " + error.message
-            );
-            return;
-          }
-
-          if (!data.session) {
-            showMessage("Login failed: No session returned.");
-            return;
-          }
-
-          showMessage("");
-          showDashboard();
-          await loadStats(data.session);
-        } catch (error) {
-          showMessage("Error: " + error.message);
-        } finally {
-          loginButton.disabled = false;
-        }
-      });
-
-    async function loadStats(existingSession = null) {
-      statsMessage.textContent = "Loading statistics...";
-
-      try {
-        let session = existingSession;
-
-        if (!session) {
-          const { data, error } = await client.auth.getSession();
-
-          if (error) throw error;
-
-          session = data.session;
-        }
-
-        if (!session) {
-          showLogin();
-          showMessage("Please log in again.");
-          return;
-        }
-
-        const response = await fetch(
-          SUPABASE_URL + "/functions/v1/analytics-stats",
-          {
-            method: "GET",
-            headers: {
-              "apikey": SUPABASE_PUBLISHABLE_KEY,
-              "Authorization": "Bearer " + session.access_token
-            }
-          }
-        );
-
-        const result = await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            result.error ||
-            result.message ||
-            "Statistics request failed (" + response.status + ")."
-          );
-        }
-
-        const last7Days = result.last7Days || [];
-
-document.getElementById("totalVisits").textContent =
-  result.totalVisits ?? 0;
-
-document.getElementById("totalWishes").textContent =
-  result.totalGreetings ?? 0;
-
-document.getElementById("todayVisits").textContent =
-  result.todayVisits ?? 0;
-
-document.getElementById("todayWishes").textContent =
-  result.todayGreetings ?? 0;
-
-document.getElementById("weekVisits").textContent =
-  last7Days.reduce((sum, day) => sum + Number(day.visits || 0), 0);
-
-document.getElementById("weekWishes").textContent =
-  last7Days.reduce((sum, day) => sum + Number(day.greetings || 0), 0);
-
-        statsMessage.textContent = "";
-      } catch (error) {
-        statsMessage.textContent =
-          "Could not load statistics: " + error.message;
-      }
-    }
-
-    document
-      .getElementById("refreshButton")
-      .addEventListener("click", () => loadStats());
-
-    document
-      .getElementById("logoutButton")
-      .addEventListener("click", async () => {
-        await client.auth.signOut();
-        showLogin();
-        showMessage("Logged out.");
-        statsMessage.textContent = "";
-      });
-
-    async function checkExistingSession() {
-      try {
-        const { data, error } = await client.auth.getSession();
-
-        if (error) throw error;
-
-        if (data.session) {
-          showDashboard();
-          await loadStats(data.session);
-        }
-      } catch (error) {
-        showMessage("Setup error: " + error.message);
-      }
-    }
-
-    checkExistingSession();
-  </script>
+checkSession();
+</script>
 </body>
         </html>
