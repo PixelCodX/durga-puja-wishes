@@ -105,7 +105,9 @@ function generateGreeting() {
   }
 
   const greetingLink = generateLink(name);
-
+  if (typeof window.navroTrackEvent === "function") {
+  window.navroTrackEvent("wish_created", window.location.pathname);
+  }
   const message =
     `🌺 Shubho Durga Puja! 🌺\n\n` +
     `Maa Durga ki kripa aap aur aapke parivaar par bani rahe. 🙏\n\n` +
