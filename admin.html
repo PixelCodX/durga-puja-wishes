@@ -383,10 +383,9 @@
           }
 
         } catch (error) {
-          showMessage(
-            error.message || "Login failed. Check your credentials."
-          );
-        } finally {
+  console.error("Login error details:", error);
+  showMessage(error.message || JSON.stringify(error));
+        }finally {
           loginButton.disabled = false;
         }
       }
