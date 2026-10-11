@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navro Admin Dashboard</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #101018;
+      color: #fff;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 35px auto;
+    }
+
+    h1 {
+      color: #e8b86d;
+      text-align: center;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #aaa;
+      margin-bottom: 30px;
+    }
+
+    .box, .card {
+      background: #1c1c29;
+      border: 1px solid #333344;
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 13px;
+      margin-top: 12px;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    input {
+      background: #101018;
+      color: white;
+      border: 1px solid #444;
+    }
+
+    button {
+      border: none;
+      background: #e8b86d;
+      color: #17120a;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .secondary {
+      background: #343445;
+      color: white;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .card h3 {
+      font-size: 14px;
+      color: #bbb;
+      margin-top: 0;
+    }
+
+    .number {
+      font-size: 32px;
+      font-weight: bold;
+      color: #e8b86d;
+      overflow-wrap: anywhere;
+    }
+
+    .day {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      padding: 13px 0;
+      border-bottom: 1px solid #333344;
+      font-size: 13px;
+    }
+
+    .day span:not(:first-child) {
+      text-align: right;
+    }
+
+    #message {
+      color: #e8b86d;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    #dashboard {
+      display: none;
+    }
+
+    .small {
+      font-size: 12px;
+      color: #999;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 12px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+      }
+
+      .card {
+        padding: 15px 10px;
+      }
+
+      .number {
+        font-size: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>✦ NAVRO ✦</h1>
+    <p class="subtitle">Private Admin Dashboard</p>
+
+    <div class="box" id="loginBox">
+      <h2>Admin Login</h2>
+
+      <form id="loginForm">
+        <input
+          type="email"
+          id="email"
+          placeholder="Admin email"
+          autocomplete="username"
+          required
+        >
+
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          autocomplete="current-password"
+          required
+        >
+
+        <button id="loginButton" type="submit">Login</button>
+      </form>
+
+      <p id="message" role="status"></p>
+
+      <p class="small">
+        Authorized admin access only.
+      </p>
+    </div>
+
+    <div id="dashboard">
+      <div class="box">
+        <h2>Website Analytics</h2>
+        <p id="welcome">Welcome, Admin</p>
+        <button class="secondary" id="refreshButton">
+          Refresh Statistics
+        </button>
+        <button class="secondary" id="logoutButton">
+          Logout
+        </button>
+        <p id="status" role="status"></p>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Total Visits</h3>
+          <div class="number" id="totalVisits">—</div>
+        </div>
+
+        <div class="card">
+          <h3>Total Greetings Created</h3>
+          <div class="number" id="totalGreetings">—</div>
+        </div>
+
+        <div class="card">
+          <h3>Today's Visits</h3>
+          <div class="number" id="todayVisits">—</div>
+        </div>
+
+        <div class="card">
+          <h3>Today's Greetings</h3>
+          <div class="number" id="todayGreetings">—</div>
+        </div>
+      </div>
+
+      <div class="box">
+        <h2>Last 7 Days</h2>
+
+        <div class="day">
+          <strong>Date</strong>
+          <strong style="text-align:right">Visits</strong>
+          <strong style="text-align:right">Greetings</strong>
+        </div>
+
+        <div id="dailyStats"></div>
+      </div>
+
+      <p class="small">
+        Statistics are based on recorded analytics events.
+        Repeat visits may be counted separately.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // STEP 1: Enter your Supabase project details.
+    const SUPABASE_URL =
+      "https://iqzzqpgtjvnzjuikrxjd.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
+
+    const client = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+    const FUNCTION_URL =
+      SUPABASE_URL + "/functions/v1/analytics-stats";
+
+    const loginBox = document.getElementById("loginBox");
+    const dashboard = document.getElementById("dashboard");
+    const message = document.getElementById("message");
+    const status = document.getElementById("status");
+    const loginButton = document.getElementById("loginButton");
+
+    function showMessage(text) {
+      message.textContent = text;
+    }
+
+    function showDashboard(user) {
+      loginBox.style.display = "none";
+      dashboard.style.display = "block";
+      document.getElementById("welcome").textContent =
+        "Logged in: " + user.email;
+    }
+
+    function showLogin() {
+      dashboard.style.display = "none";
+      loginBox.style.display = "block";
+    }
+
+    async function loadStats() {
+      status.textContent = "Loading statistics...";
+
+      try {
+        const { data, error } = await client.auth.getSession();
+
+        if (error) throw error;
+
+        const session = data.session;
+
+        if (!session) {
+          showLogin();
+          status.textContent = "";
+          return;
+        }
+
+        const response = await fetch(FUNCTION_URL, {
+          method: "GET",
+          headers: {
+            "apikey": SUPABASE_PUBLISHABLE_KEY,
+            "Authorization": "Bearer " + session.access_token
+          }
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            status.textContent =
+              "Login expired. Please log in again.";
+            return;
+          }
+
+          if (response.status === 403) {
+            status.textContent =
+              "Access denied. This account is not the authorized admin.";
+            return;
+          }
+
+          throw new Error(
+            result.error || "Could not load statistics."
+          );
+        }
+
+        document.getElementById("totalVisits").textContent =
+          result.totalVisits;
+
+        document.getElementById("totalGreetings").textContent =
+          result.totalGreetings;
+
+        document.getElementById("todayVisits").textContent =
+          result.todayVisits;
+
+        document.getElementById("todayGreetings").textContent =
+          result.todayGreetings;
+
+        const dailyStats = document.getElementById("dailyStats");
+        dailyStats.replaceChildren();
+
+        for (const day of result.last7Days || []) {
+          const row = document.createElement("div");
+          row.className = "day";
+
+          const date = document.createElement("span");
+          date.textContent = day.date;
+
+          const visits = document.createElement("span");
+          visits.textContent = day.visits;
+          visits.style.textAlign = "right";
+
+          const greetings = document.createElement("span");
+          greetings.textContent = day.greetings;
+          greetings.style.textAlign = "right";
+
+          row.append(date, visits, greetings);
+          dailyStats.appendChild(row);
+        }
+
+        status.textContent = "Statistics updated successfully.";
+
+      } catch (error) {
+        console.error("Dashboard error:", error);
+        status.textContent =
+          error.message || "Something went wrong.";
+      }
+    }
+
+    document.getElementById("loginForm").addEventListener(
+      "submit",
+      async function (event) {
+        event.preventDefault();
+
+        loginButton.disabled = true;
+        showMessage("Logging in...");
+
+        try {
+          const { data, error } = await client.auth.signInWithPassword({
+            email: document.getElementById("email").value.trim(),
+            password: document.getElementById("password").value
+          });
+
+          if (error) throw error;
+
+          showMessage("");
+
+          if (data.user) {
+            showDashboard(data.user);
+            await loadStats();
+          }
+
+        } catch (error) {
+          showMessage(
+            error.message || "Login failed. Check your credentials."
+          );
+        } finally {
+          loginButton.disabled = false;
+        }
+      }
+    );
+
+    document.getElementById("refreshButton").addEventListener(
+      "click",
+      loadStats
+    );
+
+    document.getElementById("logoutButton").addEventListener(
+      "click",
+      async function () {
+        await client.auth.signOut();
+        showLogin();
+        showMessage("You have been logged out.");
+        status.textContent = "";
+      }
+    );
+
+    // Restore an existing login when the page is reopened.
+    (async function initialize() {
+      if (
+        !SUPABASE_PUBLISHABLE_KEY ||
+        SUPABASE_PUBLISHABLE_KEY ===
+          "sb_publishable_PHpSZmbegb7KA_zeCE27Eg_YyIrnTdM"
+      ) {
+        showMessage(
+          "Setup required: Add your Supabase publishable key in admin.html."
+        );
+        return;
+      }
+
+      const { data, error } = await client.auth.getSession();
+
+      if (error) {
+        showMessage("Unable to check login. Please reload.");
+        return;
+      }
+
+      if (data.session) {
+        showDashboard(data.session.user);
+        await loadStats();
+      }
+    })();
+  </script>
+</body>
+  </html>
