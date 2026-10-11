@@ -450,3 +450,35 @@ const durgaImage = document.getElementById("durgaImage");
 durgaImage.addEventListener("error", () => {
   durgaImage.alt = "Maa Durga artwork could not be loaded. Please check the image filename.";
 });
+// NAVRO ANALYTICS — Website Visit Tracking
+(function () {
+  const SUPABASE_URL = "https://iqzzqpgtjvnzjuikrxjd.supabase.co";
+
+  const FUNCTION_URL =
+    SUPABASE_URL.replace(/\/$/, "") + "/functions/v1/track-event";
+
+  async function trackEvent(eventType, page) {
+    try {
+      const response = await fetch(FUNCTION_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          event_type: eventType,
+          page: page || window.location.pathname
+        })
+      });
+
+      if (!response.ok) {
+        console.error("Navro tracking failed:", response.status);
+      }
+    } catch (error) {
+      console.error("Navro tracking error:", error);
+    }
+  }
+
+  trackEvent("page_visit", window.location.pathname);
+
+  window.navroTrackEvent = trackEvent;
+})();
