@@ -358,7 +358,7 @@ function showGreetingPreview(name, greetingLink, whatsappLink) {
 const shareButton = document.createElement("a");
 
 shareButton.className = "create-btn";
-shareButton.href = "https://www.instagram.com/YOUR_USERNAME/";
+shareButton.href = "https://www.instagram.com/navro.co/";
 shareButton.target = "_blank";
 shareButton.rel = "noopener noreferrer";
 shareButton.textContent = "💖 Support Creator";
